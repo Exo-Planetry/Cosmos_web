@@ -28,7 +28,7 @@ Follow these steps to set up and run the project:
 2. Navigate to the project directory:
 
     ```bash
-    cd your-flask-project
+    cd Cosmos
     ```
 
 3. Install the required dependencies:
@@ -70,9 +70,9 @@ List the main dependencies used in your project:
 Feel free to contribute to this project by following these steps:
 
 1. Fork the repository.
-2. Create a new branch: `git checkout -b feature/your-feature-name`
-3. Commit your changes: `git commit -m 'Add your feature'`
-4. Push to the branch: `git push origin feature/your-feature-name`
+2. Create a new branch: `git checkout -b feature/features`
+3. Commit your changes: `git commit -m 'Add your features'`
+4. Push to the branch: `git push origin feature/fetures`
 5. Open a pull request.
 
 
@@ -138,7 +138,7 @@ Add noise: No
 Depth threshold: 0.2
 Duration threshold: 1.0
 Expected Output:
-No exoplanet confirmed based on the provided transit data
+No exoplanet was confirmed based on the provided transit data
 
 # Test Case 3: Noisy Signal with Thresholds Met
 Input:
@@ -162,7 +162,7 @@ Add noise: Yes (Noise level: 0.1)
 Depth threshold: 0.4
 Duration threshold: 2.0
 Expected Output:
-No exoplanet confirmed based on the provided transit data
+No exoplanet was confirmed based on the provided transit data
 
 # Test Case 5: Large Duration Transit Signal
 Input:
