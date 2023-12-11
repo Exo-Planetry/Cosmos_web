@@ -1,0 +1,93 @@
+  body {
+        background: #100028;
+        margin: 0;
+        padding: 0;
+        font-family: "Play", sans-serif;
+        color: #fff;
+      }
+
+      /* Add this style for better mobile experience */
+      .container {
+        width: 100%;
+        padding: 0 20px;
+        box-sizing: border-box;
+      }
+
+      /* Add this style to make the header more responsive */
+      .header__nav__option {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .dropdown-container {
+        padding-top: 50px;
+        position: relative;
+        display: inline-block;
+        text-align: center;
+        color: aliceblue;
+        font-size: 20px;
+        font-weight: 600;
+      }
+
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        text-align: left;
+        z-index: 1;
+        background-color: #fff;
+        width: 200px;
+        box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.866);
+        border-radius: 4px;
+      }
+
+      .dropdown-content a {
+        color: #333;
+        padding: 12px 16px;
+        display: block;
+        text-decoration: none;
+      }
+
+      .dropdown-content a:hover {
+        background-color: rgb(142, 109, 232);
+      }
+
+      .dropdown-container.active .dropdown-content {
+        display: block;
+      }
+
+      .form-section {
+        display: none;
+      }
+      .form-section.active {
+        display: block;
+      }
+      .fresult{
+        color: #fff;
+        font-size: 20px;
+        font-weight: 600;
+        background-color: rgba(255, 255, 255, 0.5); /* Transparent white background */
+        padding: 20px; /* Adjust the padding as needed */
+        border-radius: 10px; /* Optional: Add rounded corners */
+        margin-top: 20px; /* Adjust the margin as needed */
+        text-align: center; /* Center the text */
+      }
+
+      /* Add media queries for better responsiveness */
+      @media only screen and (max-width: 768px) {
+        .header__nav__menu {
+          display: none;
+        }
+
+        .header__nav__social {
+          display: none;
+        }
+
+        #mobile-menu-wrap {
+          display: block;
+        }
+
+        .header__nav__option {
+          flex-direction: column;
+        }
+      }
