@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zxx">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Cosmos" />
+    <meta name="keywords" content="Videograph, unica, creative, html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>COSMOS</title>
+
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Play:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Css Styles -->
+    <link
+      rel="stylesheet"
+      href="/static/css/bootstrap.min.css"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      href="/static/css/font-awesome.min.css"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      href="/static/css/elegant-icons.css"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      href="/static/css/owl.carousel.min.css"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      href="/static/css/magnific-popup.css"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      href="/static/css/slicknav.min.css"
+      type="text/css"
+    />
+    <link rel="stylesheet" href="/static/css/style.css" type="text/css" />
+    <link rel="stylesheet" href="/static/css/result.css" type="text/css" />
+
+  </head>
+
+  <body>
+    <!-- Header Section Begin -->
+    <header class="header">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-2">
+            <div class="header__logo">
+              <a href="{{ url_for('home') }}"
+                ><img src="/static/img/logo.png" alt=""
+              /></a>
+            </div>
+          </div>
+          <div class="col-lg-10">
+            <div class="header__nav__option">
+              <nav class="header__nav__menu mobile-menu">
+                <ul>
+                  <li class="active">
+                    <a href="{{ url_for('home') }}">Home</a>
+                  </li>
+                  <li>
+                    <a href="{{ url_for('explore', sec='explore') }}">Explore</a>
+                    <ul class="dropdown">
+                      <li>
+                        <a href="{{ url_for('explore',sec='from_section5') }}"
+                          >Habitability</a
+                        >
+                      </li>
+                      <li>
+                        <a href="{{ url_for('explore',sec='from_section1') }}"
+                          >Radial Velocity</a
+                        >
+                      </li>
+                      <li>
+                        <a href="{{ url_for('explore' ,sec='from_section2') }}"
+                          >Transit Method</a
+                        >
+                      </li>
+                      <li>
+                        <a href="{{ url_for('explore',sec='from_section3') }}"
+                          >Direct Imaging</a
+                        >
+                      </li>
+                      <li>
+                        <a href="{{ url_for('explore',sec='from_section4') }}"
+                          >Biosignature</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                  <li><a href="{{ url_for('home') }}">About</a></li>
+                   <li>
+                    <a href="{{ url_for('find', sec='explore') }}">Find</a>
+                    <ul class="dropdown">
+                      <li>
+                        <a href="{{ url_for('find',sec='from_section1') }}"
+                          >Radial Velocity</a
+                        >
+                      </li>
+                      <li>
+                        <a href="{{ url_for('find' ,sec='from_section2') }}"
+                          >Transit Method</a
+                        >
+                      </li>
+                      <li>
+                        <a href="{{ url_for('find',sec='from_section3') }}"
+                          >Direct Imaging</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                  <li><a href="{{ url_for('solar') }}">Solar System</a></li>
+                  <li><a href="{{ url_for('contact') }}">Contact</a></li>
+                </ul>
+              </nav>
+              <div class="header__nav__social">
+                <a href="#"><i class="fa fa-facebook"></i></a>
+                <a href="#"><i class="fa fa-twitter"></i></a>
+                <a href="#"><i class="fa fa-dribbble"></i></a>
+                <a href="#"><i class="fa fa-instagram"></i></a>
+                <a href="#"><i class="fa fa-youtube-play"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="mobile-menu-wrap"></div>
+      </div>
+    </header>
+    <!-- Header End -->
+
+    <!-- Dropdown for Form Selection -->
+    <div class="container">
+      <div class="dropdown-container active">
+        <label for="formSelector">Select Method:</label>
+        <div class="dropdown-content" id="formDropdown">
+         
+          <a href="#" onclick="selectMethod('form-section1')"
+            >Radial Velocity</a
+          >
+          <a href="#" onclick="selectMethod('form-section2')">Transit Method</a>
+          <a href="#" onclick="selectMethod('form-section3')">Direct Imaging</a>
+        
+          
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Section 1 -->
+    <section id="form-section1" class="form-section">
+      <h2 style="text-align: center; color: rgb(0, 0, 0)">
+        Radial Velocity Method
+      </h2>
+      <div class="container">
+        <form class="custom-form" action="/find" method="post">
+          <label for="radioSignal">Radio Signal</label>
+          <input type="text" name="radioSignal" required><br>
+
+          <label for="input2">Radius:</label>
+          <input type="text" id="input2" name="input2" />
+
+          <label for="input3">Distance:</label>
+          <input type="text" id="input3" name="input3" />
+
+          <label for="output">Predicted Planet:</label>
+          <output id="output1" name="output"></output>
+
+          <button
+            type="button"
+            onclick="calculate('form-section1')"
+            id="result"
+          >
+            Calculate
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Form Section 2 -->
+    <section id="form-section2" class="form-section">
+      <h2 style="text-align: center; color: rgb(0, 0, 0)">Transit Method</h2>
+      <div class="container">
+        <form class="custom-form">
+          <label for="input1">Input 1:</label>
+          <input type="text" id="input1" name="input1" />
+
+          <label for="input2">Input 2:</label>
+          <input type="text" id="input2" name="input2" />
+
+          <label for="input3">Input 3:</label>
+          <input type="text" id="input3" name="input3" />
+
+          <label for="output">Output:</label>
+          <output id="output2" name="output"></output>
+
+          <button
+            type="button"
+            onclick="calculate('form-section2')"
+            id="result"
+          >
+            Calculate
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Form Section 3 -->
+    <section id="form-section3" class="form-section">
+      <h2 style="text-align: center; color: rgb(0, 0, 0)">
+        Direct Imaging Method
+      </h2>
+      <div class="container">
+        <form class="custom-form">
+          <label for="input1">Input 1:</label>
+          <input type="text" id="input1" name="input1" />
+
+          <label for="input2">Input 2:</label>
+          <input type="text" id="input2" name="input2" />
+
+          <label for="input3">Input 3:</label>
+          <input type="text" id="input3" name="input3" />
+
+          <label for="output">Output:</label>
+          <output id="output3" name="output"></output>
+
+          <button
+            type="button"
+            onclick="calculate('form-section3')"
+            id="result"
+          >
+            Calculate
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Form Section 4 -->
+    <section id="form-section4" class="form-section">
+      <h2 style="text-align: center; color: rgb(0, 0, 0)">
+        Biosignature Method
+      </h2>
+      <div class="container">
+        <form class="custom-form">
+          <label for="input1">Input 1:</label>
+          <input type="text" id="input1" name="input1" />
+
+          <label for="input2">Input 2:</label>
+          <input type="text" id="input2" name="input2" />
+
+          <label for="input3">Input 3:</label>
+          <input type="text" id="input3" name="input3" />
+
+          <label for="output">Output:</label>
+          <output id="output4" name="output"></output>
+
+          <button
+            type="button"
+            onclick="calculate('form-section4')"
+            id="result"
+          >
+            Calculate
+          </button>
+        </form>
+      </div>
+    </section>
+
+    
+
+
+    <!-- Js Plugins -->
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/jquery.magnific-popup.min.js"></script>
+    <script src="/static/js/mixitup.min.js"></script>
+    <script src="/static/js/masonry.pkgd.min.js"></script>
+    <script src="/static/js/jquery.slicknav.js"></script>
+    <script src="/static/js/owl.carousel.min.js"></script>
+    <script src="/static/js/main.js"></script>
+
+    <!-- Custom JavaScript for dropdown and form functionality -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Hide all form sections on page load
+    var formSections = document.getElementsByClassName("form-section");
+    for (var i = 0; i < formSections.length; i++) {
+      formSections[i].classList.remove("active");
+    }
+
+    // Show the first form section
+    var firstFormSection = document.getElementById("form-section1");
+    if (firstFormSection) {
+      firstFormSection.classList.add("active");
+    }
+  });
+
+  function selectMethod(formId) {
+    // Hide all form sections
+    var formSections = document.getElementsByClassName("form-section");
+    for (var i = 0; i < formSections.length; i++) {
+      formSections[i].classList.remove("active");
+    }
+
+    // Show the selected form section
+    var selectedFormSection = document.getElementById(formId);
+    if (selectedFormSection) {
+      selectedFormSection.classList.add("active");
+    }
+  }
+
+  function calculate(formId) {
+    // Implement your calculation logic here
+    // For now, let's just alert a message
+    alert("Calculating for " + formId);
+  }
+
+
+</script>
+
+  </body>
+</html>
