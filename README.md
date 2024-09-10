@@ -13,7 +13,7 @@ To handle the form submission and make the prediction using Python, you need to 
 
 ## Introduction
 
-This project is a Flask web application that allows users to [provide a brief overview of what your application does].
+This project is a Flask web application that allows users to fill in the inputs and check whether the planet is habitable or not.
 
 ## Installation
 
@@ -48,7 +48,6 @@ Follow these steps to set up and run the project:
 ## Usage
 
 1. Open your web browser and go to [http://localhost:5000/](http://localhost:5000/).
-2. [Provide instructions on how to use your application, if necessary].
 
 ## Folder Structure
 
