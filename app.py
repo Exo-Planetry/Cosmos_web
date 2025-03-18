@@ -1,5 +1,5 @@
 from flask import Flask,redirect,url_for,render_template,request
-from data import insert_form_data
+# from data import insert_form_data
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
@@ -67,7 +67,7 @@ def predict():
         ttv_flag = calculate_ttv_flag(pl_orbper, pl_rade, pl_orbeccen, pl_orbincl, pl_tranmid, pl_imppar, pl_trandep, pl_trandur, pl_ratdor, pl_ratror, sy_vmag, sy_kmag)
 
         # Insert form data and get ttv_flag from mongodb_utils
-        ttv_flag = insert_form_data(pl_orbper, pl_rade, pl_orbeccen, pl_orbincl, pl_tranmid, pl_imppar, pl_trandep, pl_trandur, pl_ratdor, pl_ratror, sy_vmag, sy_kmag)
+        # ttv_flag = insert_form_data(pl_orbper, pl_rade, pl_orbeccen, pl_orbincl, pl_tranmid, pl_imppar, pl_trandep, pl_trandur, pl_ratdor, pl_ratror, sy_vmag, sy_kmag)
 
         # Pass ttv_flag to the template
         return render_template('explore.html', ttv_flag=ttv_flag)
