@@ -79,6 +79,51 @@ EXOPLANET_PRESETS: Dict[str, Dict[str, float]] = {
         "pl_ratror": 0.065,
         "sy_vmag": 11.13,
         "sy_kmag": 4.38
+    },
+    "k2_18b": {
+        "pl_name": "K2-18 b",
+        "pl_orbper": 32.94,
+        "pl_rade": 2.61,
+        "pl_orbeccen": 0.09,
+        "pl_orbincl": 89.58,
+        "pl_tranmid": 2457100.0,
+        "pl_imppar": 0.15,
+        "pl_trandep": 0.0028,
+        "pl_trandur": 2.7,
+        "pl_ratdor": 72.0,
+        "pl_ratror": 0.052,
+        "sy_vmag": 13.5,
+        "sy_kmag": 8.9
+    },
+    "hd_209458b": {
+        "pl_name": "HD 209458 b (Osiris)",
+        "pl_orbper": 3.52,
+        "pl_rade": 13.8,
+        "pl_orbeccen": 0.00,
+        "pl_orbincl": 86.7,
+        "pl_tranmid": 2452826.0,
+        "pl_imppar": 0.50,
+        "pl_trandep": 0.0146,
+        "pl_trandur": 3.0,
+        "pl_ratdor": 8.8,
+        "pl_ratror": 0.12,
+        "sy_vmag": 7.65,
+        "sy_kmag": 6.31
+    },
+    "kepler_186f": {
+        "pl_name": "Kepler-186 f",
+        "pl_orbper": 129.94,
+        "pl_rade": 1.17,
+        "pl_orbeccen": 0.04,
+        "pl_orbincl": 89.9,
+        "pl_tranmid": 2456400.0,
+        "pl_imppar": 0.06,
+        "pl_trandep": 0.0007,
+        "pl_trandur": 4.1,
+        "pl_ratdor": 120.0,
+        "pl_ratror": 0.022,
+        "sy_vmag": 15.2,
+        "sy_kmag": 11.6
     }
 }
 

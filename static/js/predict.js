@@ -167,3 +167,35 @@ async function calculateBiosignature() {
         console.error("Biosignature calculation failed:", e);
     }
 }
+
+async function calculateSpectroscopy() {
+    const h2o = parseFloat(document.getElementById("spec_h2o")?.value || 0.02);
+    const co2 = parseFloat(document.getElementById("spec_co2")?.value || 0.01);
+    const ch4 = parseFloat(document.getElementById("spec_ch4")?.value || 0.005);
+    const o3 = parseFloat(document.getElementById("spec_o3")?.value || 0.001);
+
+    const molecules = { H2O: h2o, CO2: co2, CH4: ch4, O3: o3 };
+
+    try {
+        const res = await fetch("/api/simulate/spectroscopy", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ molecules })
+        });
+        const data = await res.json();
+        if (data.status === "Success") {
+            const chartElem = document.getElementById("plotlySpectroscopyChart");
+            if (chartElem) {
+                chartElem.style.display = "block";
+                renderSpectroscopyChart("plotlySpectroscopyChart", data.wavelengths_microns, data.model_spectrum_ppm, data.measured_spectrum_ppm);
+            }
+            const outElem = document.getElementById("spec_output");
+            if (outElem) {
+                outElem.innerHTML = `<strong>JWST Synthetic Instrument Model:</strong> R=300 | <strong>Detected Peaks:</strong> ${data.detected_peaks.map(p => `${p.molecule} (${p.wavelength_um}µm)`).join(', ')}`;
+            }
+        }
+    } catch (e) {
+        console.error("Spectroscopy calculation failed:", e);
+    }
+}
+

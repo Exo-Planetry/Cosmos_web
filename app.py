@@ -155,16 +155,40 @@ def api_simulate_di():
     except Exception as e:
         return jsonify({'status': 'Error', 'message': str(e)}), 400
 
-@app.route('/api/simulate/biosignature', methods=['POST'])
-def api_simulate_bio():
-    """API endpoint for atmospheric chemical biosignature analysis."""
+from src.methods.spectroscopy import simulate_transmission_spectrum
+from src.methods.habitable_zone import calculate_habitable_zone
+from src.services.report_generator import generate_scientific_dossier
+
+@app.route('/api/simulate/spectroscopy', methods=['POST'])
+def api_simulate_spectroscopy():
+    """API endpoint for JWST Transmission Spectroscopy simulation."""
     try:
         data = request.get_json(force=True) if request.is_json else {}
-        composition = data.get('composition', {'Oxygen': 0.22, 'Water': 0.02, 'Nitrogen': 0.75})
-        res = analyze_biosignature_composition(composition)
+        molecules = data.get('molecules', {'H2O': 0.02, 'CO2': 0.01, 'CH4': 0.005, 'O3': 0.001})
+        res = simulate_transmission_spectrum(molecules)
         return jsonify(res), 200
     except Exception as e:
         return jsonify({'status': 'Error', 'message': str(e)}), 400
+
+@app.route('/api/simulate/habitable_zone', methods=['POST'])
+def api_simulate_hz():
+    """API endpoint for Kasting-Kopparapu Habitable Zone boundary calculation."""
+    try:
+        data = request.get_json(force=True) if request.is_json else {}
+        teff = float(data.get('st_teff', 5778.0))
+        lum = float(data.get('st_lum', 1.0))
+        dist = float(data.get('pl_orbsmax', 1.0))
+        res = calculate_habitable_zone(stellar_effective_temp=teff, stellar_luminosity=lum, planet_distance_au=dist)
+        return jsonify(res), 200
+    except Exception as e:
+        return jsonify({'status': 'Error', 'message': str(e)}), 400
+
+@app.route('/dossier/<planet_name>')
+def dossier_report(planet_name):
+    """Renders printable scientific dossier report for a planet target."""
+    metrics = get_preset_planet(planet_name.lower().replace('-', '_').replace(' ', '_'))
+    html_report = generate_scientific_dossier(planet_name, metrics)
+    return html_report
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))

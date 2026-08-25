@@ -51,6 +51,8 @@
     />
     <link rel="stylesheet" href="/static/css/style.css" type="text/css" />
     <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="/static/js/orbit_3d.js"></script>
 
     <style>
       body {
@@ -250,8 +252,9 @@
           <a href="#" onclick="selectMethod('form-section3')">Direct Imaging</a>
           <a href="#" onclick="selectMethod('form-section2')">Habitability</a>
           <a href="#" onclick="selectMethod('form-section4')">Biosignature</a>
-          
+          <a href="#" onclick="selectMethod('form-section6')">JWST Spectroscopy</a>
         </div>
+
       </div>
     </div>
 <!-- Form Section 5 -->
@@ -263,9 +266,16 @@
   <button type="button" class="btn btn-sm btn-outline-info" onclick="loadPresetTarget('toi_700d')">TOI-700 d</button>
   <button type="button" class="btn btn-sm btn-outline-info" onclick="loadPresetTarget('trappist_1e')">TRAPPIST-1 e</button>
   <button type="button" class="btn btn-sm btn-outline-info" onclick="loadPresetTarget('proxima_b')">Proxima b</button>
+  <button type="button" class="btn btn-sm btn-outline-info" onclick="loadPresetTarget('k2_18b')">K2-18 b</button>
+  <button type="button" class="btn btn-sm btn-outline-info" onclick="loadPresetTarget('hd_209458b')">HD 209458 b</button>
+  <button type="button" class="btn btn-sm btn-outline-info" onclick="loadPresetTarget('kepler_186f')">Kepler-186 f</button>
+  <button type="button" class="btn btn-sm btn-warning" onclick="init3DOrbitViewer('orbit3dContainer', 1.2, 0.08, 89.5)" style="margin-left: 10px; font-weight: bold;">🌌 View 3D Keplerian Orbit</button>
 </div>
 
+<div id="orbit3dContainer" style="width: 100%; height: 350px; background: rgba(0,0,0,0.4); border-radius: 12px; margin-bottom: 25px;"></div>
+
 <form id="transitPredictForm" class="custom-form" action="/predict" method="post">
+
 
     <label for="pl_orbper">Orbital Period (Days):</label>
     <input type="number" step="any" id="pl_orbper" name="pl_orbper" value="365.25" placeholder="e.g. 365.25" required><br>
@@ -407,7 +417,34 @@
         <div id="bio_output" style="margin-top: 20px; font-size: 1.1em; color: #ffb700;"></div>
         <div id="plotlyBioChart" style="display:none; margin-top: 20px; height: 380px;"></div>
       </div>
+    <!-- Form Section 6: JWST Transmission Spectroscopy -->
+    <section id="form-section6" class="form-section">
+      <h2 style="text-align: center; color: #ffffff; margin-bottom: 20px;">
+        JWST Transmission Spectroscopy & Molecular Opacity
+      </h2>
+      <div class="container">
+        <form class="custom-form">
+          <label for="spec_h2o">Water Vapor Fraction (H₂O):</label>
+          <input type="number" step="any" id="spec_h2o" value="0.02" placeholder="e.g. 0.02" />
+
+          <label for="spec_co2">Carbon Dioxide Fraction (CO₂):</label>
+          <input type="number" step="any" id="spec_co2" value="0.01" placeholder="e.g. 0.01" />
+
+          <label for="spec_ch4">Methane Fraction (CH₄):</label>
+          <input type="number" step="any" id="spec_ch4" value="0.005" placeholder="e.g. 0.005" />
+
+          <label for="spec_o3">Ozone Fraction (O₃ - Key Biosignature):</label>
+          <input type="number" step="any" id="spec_o3" value="0.001" placeholder="e.g. 0.001" />
+
+          <button type="button" class="btn btn-primary" onclick="calculateSpectroscopy()" style="margin-top: 15px; background: linear-gradient(45deg, #00ffb3, #00f2fe); border: none; color: #000; font-weight: bold;">
+            Synthesize JWST NIRSpec/MIRI Spectrum
+          </button>
+        </form>
+        <div id="spec_output" style="margin-top: 20px; font-size: 1.1em; color: #00ffb3;"></div>
+        <div id="plotlySpectroscopyChart" style="display:none; margin-top: 20px; height: 380px;"></div>
+      </div>
     </section>
+
 
 
     

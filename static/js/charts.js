@@ -139,3 +139,37 @@ function renderBiosignatureChart(containerId, breakdown) {
 
     Plotly.newPlot(containerId, [traceObserved, traceEarth], layout, { responsive: true });
 }
+
+function renderSpectroscopyChart(containerId, wavelengths, modelSpectrum, measuredSpectrum) {
+    if (!window.Plotly) return;
+
+    const traceMeasured = {
+        x: wavelengths,
+        y: measuredSpectrum,
+        mode: 'markers',
+        type: 'scatter',
+        marker: { color: '#ffb700', size: 5, opacity: 0.7 },
+        name: 'JWST Synthetic Measurement'
+    };
+
+    const traceModel = {
+        x: wavelengths,
+        y: modelSpectrum,
+        mode: 'lines',
+        type: 'scatter',
+        line: { color: '#00ffb3', width: 2 },
+        name: 'Atmospheric Opacity Fit Model'
+    };
+
+    const layout = {
+        title: { text: 'JWST Atmospheric Transmission Spectrum (0.6 - 12.0 µm)', font: { color: '#00ffb3', size: 16 } },
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(255,255,255,0.03)',
+        xaxis: { title: 'Wavelength (Microns µm)', gridcolor: '#222', color: '#fff' },
+        yaxis: { title: 'Transit Depth (ppm)', gridcolor: '#222', color: '#fff' },
+        margin: { t: 40, b: 40, l: 50, r: 20 }
+    };
+
+    Plotly.newPlot(containerId, [traceMeasured, traceModel], layout, { responsive: true });
+}
+
