@@ -1,0 +1,1 @@
+# COSMOS Exoplanet Platform package
