@@ -8,7 +8,7 @@ from src.methods.transit import analyze_transit_photometry
 from src.methods.direct_imaging import analyze_direct_imaging
 from src.methods.bio import analyze_biosignature_composition
 from src.db.models import log_prediction, get_analytics_summary
-from src.services.nasa_service import get_preset_planet, search_nasa_archive
+from src.services.nasa_service import get_preset_planet, search_nasa_archive, get_nasa_apod
 
 app = Flask(__name__)
 
@@ -17,7 +17,8 @@ predictor = ExoplanetPredictor(model_path='models/exoplanet_model.joblib')
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    apod_data = get_nasa_apod()
+    return render_template('index.html', apod=apod_data)
 
 @app.route('/solar')
 def solar():
@@ -94,6 +95,12 @@ def api_predict():
             'message': str(e)
         }), 500
 
+@app.route('/api/nasa/apod', methods=['GET'])
+def api_nasa_apod():
+    """API endpoint returning live NASA Astronomy Picture of the Day."""
+    data = get_nasa_apod()
+    return jsonify(data), 200
+
 @app.route('/api/nasa/preset/<preset_key>', methods=['GET'])
 def api_nasa_preset(preset_key):
     """API endpoint to get pre-configured exoplanet preset metrics."""
@@ -119,7 +126,7 @@ def api_analytics():
 def api_simulate_rv():
     """API endpoint for Radial Velocity curve analysis."""
     try:
-        data = request.get_json(force=True)
+        data = request.get_json(force=True) if request.is_json else {}
         signals = data.get('signals', [10.0, 5.0, -8.0, -12.0, -4.0, 7.0, 11.0])
         res = analyze_radial_velocity(signals)
         return jsonify(res), 200
@@ -130,7 +137,7 @@ def api_simulate_rv():
 def api_simulate_transit():
     """API endpoint for Transit light curve photometry analysis."""
     try:
-        data = request.get_json(force=True)
+        data = request.get_json(force=True) if request.is_json else {}
         flux_arr = data.get('light_curve', [1.0, 0.99, 0.98, 0.95, 0.95, 0.98, 1.0])
         res = analyze_transit_photometry(flux_arr)
         return jsonify(res), 200
@@ -141,7 +148,7 @@ def api_simulate_transit():
 def api_simulate_di():
     """API endpoint for Direct Imaging spatial signal intensity."""
     try:
-        data = request.get_json(force=True)
+        data = request.get_json(force=True) if request.is_json else {}
         intensities = data.get('intensities', [1.0, 1.05, 1.8, 1.1, 0.95])
         res = analyze_direct_imaging(intensities)
         return jsonify(res), 200
@@ -152,7 +159,7 @@ def api_simulate_di():
 def api_simulate_bio():
     """API endpoint for atmospheric chemical biosignature analysis."""
     try:
-        data = request.get_json(force=True)
+        data = request.get_json(force=True) if request.is_json else {}
         composition = data.get('composition', {'Oxygen': 0.22, 'Water': 0.02, 'Nitrogen': 0.75})
         res = analyze_biosignature_composition(composition)
         return jsonify(res), 200

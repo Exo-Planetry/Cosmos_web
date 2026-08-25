@@ -50,6 +50,7 @@
       type="text/css"
     />
     <link rel="stylesheet" href="/static/css/style.css" type="text/css" />
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
 
     <style>
       body {
@@ -318,127 +319,96 @@
     <h3 id="ajaxLabel" style="margin-bottom: 10px;"></h3>
     <p style="font-size: 1.1em; color: #e0e0e0;"><strong>ML Confidence Score:</strong> <span id="ajaxConfidence"></span>%</p>
     <p style="font-size: 1.1em; color: #e0e0e0;"><strong>Earth Similarity Index (ESI):</strong> <span id="ajaxESI"></span> / 1.00</p>
+    <div id="plotlyTransitChart" style="display:none; margin-top: 20px; height: 350px;"></div>
 </div>
 
   </div>
 </section>
-    <!-- Form Section 1 -->
+
+    <!-- Form Section 1: Radial Velocity -->
     <section id="form-section1" class="form-section">
-      <h2 style="text-align: center; color: rgb(0, 0, 0)">
-        Radial Velocity Method
+      <h2 style="text-align: center; color: #ffffff; margin-bottom: 20px;">
+        Radial Velocity Signal Analysis & Keplerian Fit
       </h2>
       <div class="container">
         <form class="custom-form">
-          <label for="input1">Temperature:</label>
-          <input type="text" id="input1" name="input1" />
+          <label for="rv_input1">Signal Point 1 (m/s):</label>
+          <input type="number" step="any" id="rv_input1" value="10.0" />
 
-          <label for="input2">Radius:</label>
-          <input type="text" id="input2" name="input2" />
+          <label for="rv_input2">Signal Point 2 (m/s):</label>
+          <input type="number" step="any" id="rv_input2" value="5.0" />
 
-          <label for="input3">Distance:</label>
-          <input type="text" id="input3" name="input3" />
+          <label for="rv_input3">Signal Point 3 (m/s):</label>
+          <input type="number" step="any" id="rv_input3" value="-8.0" />
 
-          <label for="output">Predicted Planet:</label>
-          <output id="output1" name="output"></output>
+          <label for="rv_input4">Signal Point 4 (m/s):</label>
+          <input type="number" step="any" id="rv_input4" value="-12.0" />
 
-          <button
-            type="button"
-            onclick="calculate('form-section1')"
-            id="result"
-          >
-            Calculate
+          <button type="button" class="btn btn-primary" onclick="calculateRadialVelocity()" style="margin-top: 15px; background: linear-gradient(45deg, #ffb700, #ff8800); border: none; font-weight: bold;">
+            Fit Keplerian Sine Curve
           </button>
         </form>
+        <div id="rv_output" style="margin-top: 20px; font-size: 1.1em; color: #00ffb3;"></div>
+        <div id="plotlyRVChart" style="display:none; margin-top: 20px; height: 380px;"></div>
       </div>
     </section>
 
-    <!-- Form Section 2 -->
-    <section id="form-section2" class="form-section">
-      <h2 style="text-align: center; color: rgb(0, 0, 0)">Habitability</h2>
-      <div class="container">
-        <form class="custom-form">
-          <label for="input1">Input 1:</label>
-          <input type="text" id="input1" name="input1" />
-
-          <label for="input2">Input 2:</label>
-          <input type="text" id="input2" name="input2" />
-
-          <label for="input3">Input 3:</label>
-          <input type="text" id="input3" name="input3" />
-
-          <label for="output">Output:</label>
-          <output id="output2" name="output"></output>
-
-          <button
-            type="button"
-            onclick="calculate('form-section2')"
-            id="result"
-          >
-            Calculate
-          </button>
-        </form>
-      </div>
-    </section>
-
-    <!-- Form Section 3 -->
+    <!-- Form Section 3: Direct Imaging -->
     <section id="form-section3" class="form-section">
-      <h2 style="text-align: center; color: rgb(0, 0, 0)">
-        Direct Imaging Method
+      <h2 style="text-align: center; color: #ffffff; margin-bottom: 20px;">
+        Direct Imaging Coronagraph Spatial Intensity
       </h2>
       <div class="container">
         <form class="custom-form">
-          <label for="input1">Input 1:</label>
-          <input type="text" id="input1" name="input1" />
+          <label for="di_input1">Background Noise Pixel 1:</label>
+          <input type="number" step="any" id="di_input1" value="1.0" />
 
-          <label for="input2">Input 2:</label>
-          <input type="text" id="input2" name="input2" />
+          <label for="di_input2">Background Noise Pixel 2:</label>
+          <input type="number" step="any" id="di_input2" value="1.05" />
 
-          <label for="input3">Input 3:</label>
-          <input type="text" id="input3" name="input3" />
+          <label for="di_input3">Planet Spatial Peak Pixel Intensity:</label>
+          <input type="number" step="any" id="di_input3" value="1.85" />
 
-          <label for="output">Output:</label>
-          <output id="output3" name="output"></output>
+          <label for="di_input4">Background Noise Pixel 4:</label>
+          <input type="number" step="any" id="di_input4" value="1.1" />
 
-          <button
-            type="button"
-            onclick="calculate('form-section3')"
-            id="result"
-          >
-            Calculate
+          <button type="button" class="btn btn-primary" onclick="calculateDirectImaging()" style="margin-top: 15px; background: linear-gradient(45deg, #00ffb3, #00bfe7); border: none; color: #000; font-weight: bold;">
+            Analyze Coronagraph SNR Peak
           </button>
         </form>
+        <div id="di_output" style="margin-top: 20px; font-size: 1.1em; color: #00f2fe;"></div>
+        <div id="plotlyDirectChart" style="display:none; margin-top: 20px; height: 380px;"></div>
       </div>
     </section>
 
-    <!-- Form Section 4 -->
+    <!-- Form Section 4: Biosignature -->
     <section id="form-section4" class="form-section">
-      <h2 style="text-align: center; color: rgb(0, 0, 0)">
-        Biosignature Method
+      <h2 style="text-align: center; color: #ffffff; margin-bottom: 20px;">
+        Atmospheric Biosignature Spectral Analysis
       </h2>
       <div class="container">
         <form class="custom-form">
-          <label for="input1">Input 1:</label>
-          <input type="text" id="input1" name="input1" />
+          <label for="bio_o2">Oxygen Fraction (O₂):</label>
+          <input type="number" step="any" id="bio_o2" value="0.21" placeholder="e.g. 0.21 for 21%" />
 
-          <label for="input2">Input 2:</label>
-          <input type="text" id="input2" name="input2" />
+          <label for="bio_h2o">Water Vapor Fraction (H₂O):</label>
+          <input type="number" step="any" id="bio_h2o" value="0.02" placeholder="e.g. 0.02 for 2%" />
 
-          <label for="input3">Input 3:</label>
-          <input type="text" id="input3" name="input3" />
+          <label for="bio_n2">Nitrogen Fraction (N₂):</label>
+          <input type="number" step="any" id="bio_n2" value="0.75" placeholder="e.g. 0.75 for 75%" />
 
-          <label for="output">Output:</label>
-          <output id="output4" name="output"></output>
+          <label for="bio_co2">Carbon Dioxide Fraction (CO₂):</label>
+          <input type="number" step="any" id="bio_co2" value="0.01" placeholder="e.g. 0.01 for 1%" />
 
-          <button
-            type="button"
-            onclick="calculate('form-section4')"
-            id="result"
-          >
-            Calculate
+          <button type="button" class="btn btn-primary" onclick="calculateBiosignature()" style="margin-top: 15px; background: linear-gradient(45deg, #7928ca, #ff0080); border: none; font-weight: bold;">
+            Evaluate Biosignature Habitability
           </button>
         </form>
+        <div id="bio_output" style="margin-top: 20px; font-size: 1.1em; color: #ffb700;"></div>
+        <div id="plotlyBioChart" style="display:none; margin-top: 20px; height: 380px;"></div>
       </div>
     </section>
+
 
     
 

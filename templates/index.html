@@ -326,72 +326,35 @@
     </section>
     <!-- Counter Section End -->
 
-    <!-- Team Section Begin -->
-    <section class="team spad set-bg" data-setbg="/static/img/team-bg.gif">
+    <!-- NASA Astronomy Picture of the Day (APOD) Section Begin -->
+    <section class="team spad set-bg" style="background: linear-gradient(180deg, #0b001a 0%, #150036 100%); padding: 60px 0;">
       <div class="container">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="section-title team__title">
-              <span>Nice to meet</span>
-              <h2>OUR Team</h2>
+        <div class="row mb-4">
+          <div class="col-lg-12 text-center">
+            <div class="section-title">
+              <span style="color: #00f2fe; text-transform: uppercase; letter-spacing: 2px; font-weight: bold;">Real-Time NASA Astronomy Feed</span>
+              <h2 style="color: #ffffff; font-size: 2.2em; font-family: 'Play', sans-serif;">Astronomy Picture of the Day</h2>
             </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-lg-3 col-md-6 col-sm-6 p-0">
-            <div
-              class="team__item team__item--second set-bg"
-              data-setbg="/static/img/team/team-1.jpg"
-            >
-              <div class="team__item__text">
-                <h4>Rohan Kumar</h4>
-                <div class="team__item__social">
-                  <a href="#"><i class="fa fa-facebook"></i></a>
-                  <a href="#"><i class="fa fa-twitter"></i></a>
-                  <a href="#"><i class="fa fa-instagram"></i></a>
-                </div>
-              </div>
+        <div class="row align-items-center" style="background: rgba(255,255,255,0.05); border-radius: 16px; padding: 25px; border: 1px solid rgba(0, 242, 254, 0.2); backdrop-filter: blur(10px);">
+          <div class="col-lg-6 mb-3 mb-lg-0">
+            <div style="border-radius: 12px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,242,254,0.3);">
+              <img id="apodImage" src="{{ apod.url if apod is defined else 'https://images-assets.nasa.gov/image/PIA23641/PIA23641~orig.jpg' }}" alt="NASA APOD" style="width: 100%; height: 340px; object-fit: cover;">
             </div>
           </div>
-          <div class="col-lg-3 col-md-6 col-sm-6 p-0">
-            <div
-              class="team__item team__item--third set-bg"
-              data-setbg="/static/img/team/team-3.jpg"
-            >
-              <div class="team__item__text">
-                <h4>Hemani Tekwani</h4>
-                <div class="team__item__social">
-                  <a href="#"><i class="fa fa-facebook"></i></a>
-                  <a href="#"><i class="fa fa-twitter"></i></a>
-                  <a href="#"><i class="fa fa-instagram"></i></a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-6 col-sm-6 p-0">
-            <div
-              class="team__item team__item--four set-bg"
-              data-setbg="/static/img/team/team-4.jpg"
-            >
-              <div class="team__item__text">
-                <h4>Akshat Verma</h4>
-                <div class="team__item__social">
-                  <a href="#"><i class="fa fa-facebook"></i></a>
-                  <a href="#"><i class="fa fa-twitter"></i></a>
-                  <a href="#"><i class="fa fa-instagram"></i></a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-12 p-0">
-            <div class="team__btn">
-              <a href="#" class="primary-btn">Meet Our Team</a>
+          <div class="col-lg-6">
+            <div style="color: #e0e0e0; padding: 10px;">
+              <span id="apodDate" class="badge bg-info text-dark mb-2" style="font-size: 0.9em; background: #00f2fe !important;">{{ apod.date if apod is defined else 'NASA Feed' }}</span>
+              <h3 id="apodTitle" style="color: #00f2fe; margin-bottom: 15px; font-size: 1.6em;">{{ apod.title if apod is defined else 'Deep Space Observation' }}</h3>
+              <p id="apodExplanation" style="line-height: 1.6; font-size: 0.95em; color: #cccccc; max-height: 160px; overflow-y: auto;">{{ apod.explanation if apod is defined else 'Exploring astronomical observations powered by NASA API services.' }}</p>
+              <a href="{{ url_for('explore', sec='from_section5') }}" class="primary-btn mt-3" style="background: linear-gradient(45deg, #00f2fe, #4facfe); border: none; border-radius: 30px; padding: 10px 25px;">Analyze Exoplanets Now</a>
             </div>
           </div>
         </div>
       </div>
     </section>
-    <!-- Team Section End -->
+    <!-- NASA APOD Section End -->
 
     <!-- Call To Action Section Begin -->
     <section class="callto spad set-bg" data-setbg="/static/img/image1.png">
@@ -401,7 +364,7 @@
             <div class="callto__text">
               <h2>Unlocking the Secrets of Exoplanets, One Click at a Time.</h2>
               <p>Exploring the Cosmos, One Exoplanet at a Time.</p>
-              <a href="/templates/explore.html">Start your StellarVoyage.</a>
+              <a href="{{ url_for('explore', sec='from_section5') }}">Start your StellarVoyage.</a>
             </div>
           </div>
         </div>
@@ -434,15 +397,16 @@
           <div class="row">
             <div class="col-lg-4 col-md-6 col-sm-6">
               <div class="footer__option__item">
-                <h5>About us</h5>
-                <p>Formed in 2023 by Rohan, Hemani & Akshat</p>
-                <a href="#" class="read__more"
-                  >Read more <span class="arrow_right"></span
+                <h5>About COSMOS</h5>
+                <p>COSMOS Open Astronomical & Machine Learning Platform</p>
+                <a href="{{ url_for('explore', sec='from_section5') }}" class="read__more"
+                  >Explore Platform <span class="arrow_right"></span
                 ></a>
               </div>
             </div>
             <div class="col-lg-2 col-md-3 col-sm-3">
               <div class="footer__option__item">
+
                 <h5>Who we are</h5>
                 <ul>
                   <li><a href="#">Team</a></li>

@@ -2241,3 +2241,67 @@ ol {
     padding: 30px 40px 35px 35px;
   }
 }
+
+/*---------------------------------------------------------
+  COSMOS Modern Glassmorphism Space Theme Extensions
+-----------------------------------------------------------*/
+:root {
+  --cosmos-bg-dark: #0b001a;
+  --cosmos-accent-cyan: #00f2fe;
+  --cosmos-accent-blue: #4facfe;
+  --cosmos-accent-purple: #7928ca;
+  --cosmos-glass-bg: rgba(255, 255, 255, 0.06);
+  --cosmos-glass-border: rgba(0, 242, 254, 0.25);
+}
+
+body {
+  background: var(--cosmos-bg-dark) !important;
+  color: #f0f0f0;
+  font-family: 'Play', 'Outfit', sans-serif;
+}
+
+.glass-card {
+  background: var(--cosmos-glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--cosmos-glass-border);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  padding: 25px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.glass-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(0, 242, 254, 0.5);
+  box-shadow: 0 12px 40px rgba(0, 242, 254, 0.25);
+}
+
+.btn-cosmos-neon {
+  background: linear-gradient(135deg, var(--cosmos-accent-cyan), var(--cosmos-accent-blue));
+  color: #000 !important;
+  font-weight: 700;
+  border: none;
+  border-radius: 30px;
+  padding: 12px 28px;
+  box-shadow: 0 4px 15px rgba(0, 242, 254, 0.4);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.btn-cosmos-neon:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 25px rgba(0, 242, 254, 0.7);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0b001a;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #00f2fe, #7928ca);
+  border-radius: 4px;
+}
