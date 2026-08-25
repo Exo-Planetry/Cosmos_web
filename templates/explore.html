@@ -254,62 +254,72 @@
       </div>
     </div>
 <!-- Form Section 5 -->
-<section id="form-section5" class="form-section active">
-  <h2 style="text-align: center; color: rgb(0, 0, 0)">
-   Transit Method
-  </h2>
-  <div class="container">
-<form class="custom-form" action="/predict" method="post">
+<!-- Target Presets Bar -->
+<div class="preset-bar text-center" style="margin-bottom: 25px;">
+  <span style="font-weight: bold; margin-right: 10px; color: #4facfe;">Quick Presets:</span>
+  <button type="button" class="btn btn-sm btn-outline-info" onclick="loadPresetTarget('earth_twin')">Earth Twin</button>
+  <button type="button" class="btn btn-sm btn-outline-info" onclick="loadPresetTarget('kepler_22b')">Kepler-22b</button>
+  <button type="button" class="btn btn-sm btn-outline-info" onclick="loadPresetTarget('toi_700d')">TOI-700 d</button>
+  <button type="button" class="btn btn-sm btn-outline-info" onclick="loadPresetTarget('trappist_1e')">TRAPPIST-1 e</button>
+  <button type="button" class="btn btn-sm btn-outline-info" onclick="loadPresetTarget('proxima_b')">Proxima b</button>
+</div>
 
- <!-- Add input fields for each column -->
-    <label for="pl_orbper">pl_orbper:</label>
-    <input type="text" name="pl_orbper" required><br>
+<form id="transitPredictForm" class="custom-form" action="/predict" method="post">
 
-    <label for="pl_rade">pl_rade:</label>
-    <input type="text" name="pl_rade" required><br>
+    <label for="pl_orbper">Orbital Period (Days):</label>
+    <input type="number" step="any" id="pl_orbper" name="pl_orbper" value="365.25" placeholder="e.g. 365.25" required><br>
 
-    <label for="pl_orbeccen">pl_orbeccen:</label>
-    <input type="text" name="pl_orbeccen" required><br>
+    <label for="pl_rade">Planetary Radius (Earth Radii - R⊕):</label>
+    <input type="number" step="any" id="pl_rade" name="pl_rade" value="1.0" placeholder="e.g. 1.0" required><br>
 
-    <label for="pl_orbeccen">pl_orbeccen:</label>
-    <input type="text" name="pl_orbincl" required><br>
+    <label for="pl_orbeccen">Orbital Eccentricity (0 to 1):</label>
+    <input type="number" step="any" id="pl_orbeccen" name="pl_orbeccen" value="0.0" placeholder="e.g. 0.05" required><br>
 
-    <label for="pl_orbeccen">pl_orbeccen:</label>
-    <input type="text" name="pl_tranmid" required><br>
+    <label for="pl_orbincl">Orbital Inclination (Degrees):</label>
+    <input type="number" step="any" id="pl_orbincl" name="pl_orbincl" value="89.5" placeholder="e.g. 89.5" required><br>
 
-    <label for="pl_orbeccen">pl_orbeccen:</label>
-    <input type="text" name="pl_imppar" required><br>
+    <label for="pl_tranmid">Transit Epoch Midpoint (JD):</label>
+    <input type="number" step="any" id="pl_tranmid" name="pl_tranmid" value="2459000.0" placeholder="e.g. 2459000.0" required><br>
 
-    <label for="pl_orbeccen">pl_orbeccen:</label>
-    <input type="text" name="pl_trandep" required><br>
+    <label for="pl_imppar">Impact Parameter:</label>
+    <input type="number" step="any" id="pl_imppar" name="pl_imppar" value="0.02" placeholder="e.g. 0.02" required><br>
 
-    <label for="pl_orbeccen">pl_orbeccen:</label>
-    <input type="text" name="pl_trandur" required><br>
+    <label for="pl_trandep">Transit Depth (fraction or ppm):</label>
+    <input type="number" step="any" id="pl_trandep" name="pl_trandep" value="0.0084" placeholder="e.g. 0.0084" required><br>
 
-    <label for="pl_orbeccen">pl_orbeccen:</label>
-    <input type="text" name="pl_ratdor" required><br>
+    <label for="pl_trandur">Transit Duration (Hours):</label>
+    <input type="number" step="any" id="pl_trandur" name="pl_trandur" value="3.2" placeholder="e.g. 3.2" required><br>
 
-    <label for="pl_orbeccen">pl_orbeccen:</label>
-    <input type="text" name="pl_ratror" required><br>
+    <label for="pl_ratdor">a / R* (Ratio of Semi-Major Axis to Stellar Radius):</label>
+    <input type="number" step="any" id="pl_ratdor" name="pl_ratdor" value="15.0" placeholder="e.g. 15.0" required><br>
 
-    <label for="pl_orbeccen">pl_orbeccen:</label>
-    <input type="text" name="sy_vmag" required><br>
+    <label for="pl_ratror">Rp / R* (Ratio of Planet Radius to Stellar Radius):</label>
+    <input type="number" step="any" id="pl_ratror" name="pl_ratror" value="0.09" placeholder="e.g. 0.09" required><br>
 
-    <!-- Add other input fields here -->
+    <label for="sy_vmag">Stellar V-band Magnitude (sy_vmag):</label>
+    <input type="number" step="any" id="sy_vmag" name="sy_vmag" value="10.0" placeholder="e.g. 10.0" required><br>
 
-    <label for="sy_kmag">sy_kmag:</label>
-    <input type="text" name="sy_kmag" required><br>
+    <label for="sy_kmag">Stellar K-band Magnitude (sy_kmag):</label>
+    <input type="number" step="any" id="sy_kmag" name="sy_kmag" value="8.0" placeholder="e.g. 8.0" required><br>
 
-    <!-- Add a submit button -->
-    <input type="submit" value="Submit">
+    <input type="submit" value="Analyze Candidate with ML Engine" class="btn btn-primary" style="background: linear-gradient(45deg, #00f2fe, #4facfe); border: none; font-weight: bold; margin-top: 15px;">
 </form>
 
-<!-- Display the result -->
-{% if ttv_flag is defined %}
-    <p class="fresult">Result (ttv_flag): {{ ttv_flag }}</p>
+<!-- Prediction Results Card -->
+{% if prediction_result is defined and prediction_result %}
+    <div class="result-card" style="margin-top: 25px; padding: 20px; background: rgba(255,255,255,0.08); border-radius: 10px; border-left: 5px solid {{ prediction_result.label_color }};">
+        <h3 style="color: {{ prediction_result.label_color }}; margin-bottom: 10px;">{{ prediction_result.classification_label }}</h3>
+        <p style="font-size: 1.1em; color: #e0e0e0;"><strong>ML Confidence Score:</strong> {{ prediction_result.confidence_score }}%</p>
+        <p style="font-size: 1.1em; color: #e0e0e0;"><strong>Earth Similarity Index (ESI):</strong> {{ prediction_result.earth_similarity_index }} / 1.00</p>
+    </div>
 {% endif %}
 
-    
+<div id="ajaxPredictionResults" style="display: none; margin-top: 25px; padding: 20px; background: rgba(255,255,255,0.08); border-radius: 10px;">
+    <h3 id="ajaxLabel" style="margin-bottom: 10px;"></h3>
+    <p style="font-size: 1.1em; color: #e0e0e0;"><strong>ML Confidence Score:</strong> <span id="ajaxConfidence"></span>%</p>
+    <p style="font-size: 1.1em; color: #e0e0e0;"><strong>Earth Similarity Index (ESI):</strong> <span id="ajaxESI"></span> / 1.00</p>
+</div>
+
   </div>
 </section>
     <!-- Form Section 1 -->
@@ -520,6 +530,7 @@
     });
   }
 </script>
-
+<script src="/static/js/predict.js"></script>
+<script src="/static/js/charts.js"></script>
   </body>
 </html>
