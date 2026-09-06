@@ -1,49 +1,44 @@
-function loadPresetTarget(presetKey) {
-    fetch(`/api/nasa/preset/${presetKey}`)
-        .then(response => response.json())
-        .then(res => {
-            if (res.status === 'Success' && res.data) {
-                const data = res.data;
-                for (const key in data) {
-                    const inputElem = document.getElementById(key);
-                    if (inputElem) {
-                        inputElem.value = data[key];
-                    }
-                }
-                
-                const formElem = document.getElementById("transitPredictForm");
-                if (formElem) {
-                    formElem.style.boxShadow = "0 0 20px #00f2fe";
-                    setTimeout(() => formElem.style.boxShadow = "none", 1500);
-                }
-            }
-        })
-        .catch(err => console.error("Failed to load target preset:", err));
-}
+/**
+ * COSMOS Plotly Visualization Engine
+ * Renders Photometric Light Curves, Keplerian RV Orbit Fits, Residuals, Transmission Spectra, & SNR Bars.
+ */
 
-function renderTransitChart(containerId, timePoints, fluxValues) {
+function renderTransitChart(containerId, phase, flux, fittedFlux = null, residuals = null) {
     if (!window.Plotly) return;
 
-    const trace = {
-        x: timePoints,
-        y: fluxValues,
-        mode: 'lines+markers',
+    const traceData = {
+        x: phase,
+        y: flux,
+        mode: 'markers',
         type: 'scatter',
-        marker: { color: '#00f2fe', size: 6 },
-        line: { color: '#4facfe', width: 2 },
-        name: 'Normalized Relative Flux'
+        marker: { color: '#38bdf8', size: 4, opacity: 0.7 },
+        name: 'Phase-Folded Flux'
     };
+
+    const traces = [traceData];
+
+    if (fittedFlux) {
+        traces.push({
+            x: phase,
+            y: fittedFlux,
+            mode: 'lines',
+            type: 'scatter',
+            line: { color: '#00ffb3', width: 2.5 },
+            name: 'Box Transit Model Fit'
+        });
+    }
 
     const layout = {
-        title: { text: 'Transit Light Curve Photometry', font: { color: '#00f2fe', size: 16 } },
+        title: { text: 'Phase-Folded Photometric Transit & Transit Fit Model', font: { color: '#00ffb3', size: 16 } },
         paper_bgcolor: 'rgba(0,0,0,0)',
         plot_bgcolor: 'rgba(255,255,255,0.03)',
-        xaxis: { title: 'Time / Phase (Hours)', gridcolor: '#222', color: '#fff' },
-        yaxis: { title: 'Relative Stellar Flux', gridcolor: '#222', color: '#fff' },
-        margin: { t: 40, b: 40, l: 50, r: 20 }
+        xaxis: { title: 'Orbital Phase (-0.5 to +0.5)', gridcolor: '#1e293b', color: '#94a3b8' },
+        yaxis: { title: 'Normalized Relative Flux', gridcolor: '#1e293b', color: '#94a3b8' },
+        margin: { t: 40, b: 40, l: 50, r: 20 },
+        legend: { font: { color: '#fff' } }
     };
 
-    Plotly.newPlot(containerId, [trace], layout, { responsive: true });
+    Plotly.newPlot(containerId, traces, layout, { responsive: true });
 }
 
 function renderRVChart(containerId, rawTime, rawVel, fitTime, fitVel) {
@@ -55,7 +50,7 @@ function renderRVChart(containerId, rawTime, rawVel, fitTime, fitVel) {
         mode: 'markers',
         type: 'scatter',
         marker: { color: '#ffb700', size: 8 },
-        name: 'Observed Radial Velocity'
+        name: 'Observed RV Data'
     };
 
     const traceFit = {
@@ -63,81 +58,21 @@ function renderRVChart(containerId, rawTime, rawVel, fitTime, fitVel) {
         y: fitVel,
         mode: 'lines',
         type: 'scatter',
-        line: { color: '#00ffb3', width: 2 },
-        name: 'Keplerian Fitted Curve'
+        line: { color: '#00ffb3', width: 2.5 },
+        name: '6-Parameter Keplerian Fit'
     };
 
     const layout = {
-        title: { text: 'Radial Velocity Orbital Variation (m/s)', font: { color: '#ffb700', size: 16 } },
+        title: { text: 'Keplerian Radial Velocity Orbital Curve (m/s)', font: { color: '#ffb700', size: 16 } },
         paper_bgcolor: 'rgba(0,0,0,0)',
         plot_bgcolor: 'rgba(255,255,255,0.03)',
-        xaxis: { title: 'Observation Epoch (Days)', gridcolor: '#222', color: '#fff' },
-        yaxis: { title: 'Radial Velocity (m/s)', gridcolor: '#222', color: '#fff' },
-        margin: { t: 40, b: 40, l: 50, r: 20 }
+        xaxis: { title: 'Time / Epoch (Days)', gridcolor: '#1e293b', color: '#94a3b8' },
+        yaxis: { title: 'Radial Velocity (m/s)', gridcolor: '#1e293b', color: '#94a3b8' },
+        margin: { t: 40, b: 40, l: 50, r: 20 },
+        legend: { font: { color: '#fff' } }
     };
 
     Plotly.newPlot(containerId, [traceScatter, traceFit], layout, { responsive: true });
-}
-
-function renderDirectImagingChart(containerId, pixels, intensities) {
-    if (!window.Plotly) return;
-
-    const trace = {
-        x: pixels,
-        y: intensities,
-        type: 'bar',
-        marker: {
-            color: intensities.map(v => v > 1.2 ? '#00ffb3' : '#7928ca')
-        },
-        name: 'Spatial Signal Intensity'
-    };
-
-    const layout = {
-        title: { text: 'Direct Imaging Spatial Coronagraph Signal Peak', font: { color: '#00ffb3', size: 16 } },
-        paper_bgcolor: 'rgba(0,0,0,0)',
-        plot_bgcolor: 'rgba(255,255,255,0.03)',
-        xaxis: { title: 'Spatial Pixel Index', gridcolor: '#222', color: '#fff' },
-        yaxis: { title: 'Normalized Signal Intensity', gridcolor: '#222', color: '#fff' },
-        margin: { t: 40, b: 40, l: 50, r: 20 }
-    };
-
-    Plotly.newPlot(containerId, [trace], layout, { responsive: true });
-}
-
-function renderBiosignatureChart(containerId, breakdown) {
-    if (!window.Plotly) return;
-
-    const gases = Object.keys(breakdown);
-    const observed = gases.map(g => breakdown[g].observed_fraction * 100);
-    const earth = gases.map(g => breakdown[g].earth_baseline * 100);
-
-    const traceObserved = {
-        x: gases,
-        y: observed,
-        name: 'Candidate Exoplanet (%)',
-        type: 'bar',
-        marker: { color: '#00f2fe' }
-    };
-
-    const traceEarth = {
-        x: gases,
-        y: earth,
-        name: 'Earth Baseline (%)',
-        type: 'bar',
-        marker: { color: '#ff4757' }
-    };
-
-    const layout = {
-        title: { text: 'Atmospheric Biosignature Gas Breakdown vs Earth Baseline', font: { color: '#00f2fe', size: 16 } },
-        barmode: 'group',
-        paper_bgcolor: 'rgba(0,0,0,0)',
-        plot_bgcolor: 'rgba(255,255,255,0.03)',
-        xaxis: { title: 'Atmospheric Gas Species', gridcolor: '#222', color: '#fff' },
-        yaxis: { title: 'Volume Concentration (%)', type: 'log', gridcolor: '#222', color: '#fff' },
-        margin: { t: 40, b: 40, l: 50, r: 20 }
-    };
-
-    Plotly.newPlot(containerId, [traceObserved, traceEarth], layout, { responsive: true });
 }
 
 function renderSpectroscopyChart(containerId, wavelengths, modelSpectrum, measuredSpectrum) {
@@ -149,7 +84,7 @@ function renderSpectroscopyChart(containerId, wavelengths, modelSpectrum, measur
         mode: 'markers',
         type: 'scatter',
         marker: { color: '#ffb700', size: 5, opacity: 0.7 },
-        name: 'JWST Synthetic Measurement'
+        name: 'JWST Synthetic Observation'
     };
 
     const traceModel = {
@@ -157,19 +92,19 @@ function renderSpectroscopyChart(containerId, wavelengths, modelSpectrum, measur
         y: modelSpectrum,
         mode: 'lines',
         type: 'scatter',
-        line: { color: '#00ffb3', width: 2 },
-        name: 'Atmospheric Opacity Fit Model'
+        line: { color: '#00ffb3', width: 2.5 },
+        name: 'Atmospheric Opacity Model'
     };
 
     const layout = {
-        title: { text: 'JWST Atmospheric Transmission Spectrum (0.6 - 12.0 µm)', font: { color: '#00ffb3', size: 16 } },
+        title: { text: 'Transmission Opacity Spectrum (0.6 - 12.0 µm)', font: { color: '#00ffb3', size: 16 } },
         paper_bgcolor: 'rgba(0,0,0,0)',
         plot_bgcolor: 'rgba(255,255,255,0.03)',
-        xaxis: { title: 'Wavelength (Microns µm)', gridcolor: '#222', color: '#fff' },
-        yaxis: { title: 'Transit Depth (ppm)', gridcolor: '#222', color: '#fff' },
-        margin: { t: 40, b: 40, l: 50, r: 20 }
+        xaxis: { title: 'Wavelength (Microns µm)', gridcolor: '#1e293b', color: '#94a3b8' },
+        yaxis: { title: 'Transit Depth (ppm)', gridcolor: '#1e293b', color: '#94a3b8' },
+        margin: { t: 40, b: 40, l: 50, r: 20 },
+        legend: { font: { color: '#fff' } }
     };
 
     Plotly.newPlot(containerId, [traceMeasured, traceModel], layout, { responsive: true });
 }
-
