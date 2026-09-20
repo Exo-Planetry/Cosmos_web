@@ -1,9 +1,13 @@
 services:
   - type: web
-    name: cosmos-exoplanet-app
+    name: cosmos
     runtime: python
-    buildCommand: "python -m pip install --upgrade pip setuptools wheel && pip install -r requirements.txt && python -m src.ml.train"
-    startCommand: "gunicorn app:app"
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.10.12
+      - key: DATABASE_URL
+        sync: false
+      - key: COSMOS_SECRET
+        sync: false
+      - key: CORS_ORIGINS
+        value: '*'

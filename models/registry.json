@@ -1,0 +1,7 @@
+[
+  {"name":"transit-cnn-transformer","version":"0.1.0","kind":"time-series","status":"research","metrics":{}},
+  {"name":"spectral-autoencoder","version":"0.1.0","kind":"representation-learning","status":"research","metrics":{}},
+  {"name":"multimodal-assessor","version":"0.1.0","kind":"multimodal","status":"research","metrics":{}},
+  {"name":"physics-informed-network","version":"0.1.0","kind":"physics-informed","status":"research","metrics":{}},
+  {"name":"catalog-anomaly-isolation-forest","version":"1.0.0","kind":"anomaly-detection","status":"baseline","metrics":{}}
+]

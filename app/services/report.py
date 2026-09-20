@@ -1,0 +1,13 @@
+import html, json
+def render_report(result):
+    d=result.get('target_data',{}); a=result.get('candidate_assessment',{}); rows=''.join(f'<tr><td>{html.escape(str(k))}</td><td>{html.escape(str(v))}</td></tr>' for k,v in d.items() if v is not None)
+    return f'''<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>COSMOS Report</title><style>body{{font:16px system-ui;background:#07111f;color:#eaf2ff;max-width:980px;margin:auto;padding:24px}}section{{background:#101d30;border:1px solid #263b59;border-radius:18px;padding:22px;margin:16px 0}}table{{width:100%;border-collapse:collapse}}td{{padding:9px;border-bottom:1px solid #263b59}}pre{{white-space:pre-wrap;overflow:auto}}</style></head><body><h1>COSMOS Scientific Report</h1><p>Evidence-based assessment; not scientific confirmation.</p><section><h2>{html.escape(str(result.get('target_name')))}</h2><h3>{a.get('score','—')}/100 · {html.escape(str(a.get('label','Assessment')))}</h3><p>False-positive risk: {a.get('false_positive_risk','—')}%</p></section><section><h2>Target data</h2><table>{rows}</table></section><section><h2>Evidence</h2><pre>{html.escape(json.dumps(result.get('evidence_fusion',{}),indent=2))}</pre></section><section><h2>Provenance</h2><pre>{html.escape(json.dumps(result.get('provenance',{}),indent=2))}</pre></section></body></html>'''
+
+
+def render_pdf(result):
+    from io import BytesIO
+    from reportlab.lib.pagesizes import A4
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+    from reportlab.lib import colors
+    from reportlab.lib.styles import getSampleStyleSheet
+    buf=BytesIO(); doc=SimpleDocTemplate(buf,pagesize=A4,rightMargin=36,leftMargin=36,topMargin=36,bottomMargin=36); styles=getSampleStyleSheet(); story=[Paragraph('COSMOS Scientific Report',styles['Title']),Paragraph('Evidence-based candidate assessment — not planet confirmation.',styles['BodyText']),Spacer(1,12),Paragraph(str(result.get('target_name','Unknown')),styles['Heading2'])]; a=result.get('candidate_assessment',{}); story += [Paragraph(f"Score: {a.get('score','—')}/100",styles['Heading3']),Paragraph(f"False-positive risk: {a.get('false_positive_risk','—')}%",styles['BodyText']),Spacer(1,12)]; rows=[['Field','Value']]+[[str(k),str(v)] for k,v in result.get('target_data',{}).items() if v is not None]; t=Table(rows,colWidths=[160,330]); t.setStyle(TableStyle([('GRID',(0,0),(-1,-1),.4,colors.grey),('BACKGROUND',(0,0),(-1,0),colors.lightgrey),('VALIGN',(0,0),(-1,-1),'TOP')])); story += [t,Spacer(1,12),Paragraph('Provenance',styles['Heading3']),Paragraph(str(result.get('provenance',{})),styles['BodyText'])]; doc.build(story); return buf.getvalue()

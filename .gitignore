@@ -1,7 +1,7 @@
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
-.pytest_cache/
-test_backend.py
-cosmos_predictions.db
+*.py[cod]
+.venv/
+.env
+*.db
+uploads/*
+!uploads/.gitkeep
