@@ -47,4 +47,25 @@ async def mast_search_async(target:str):
     except Exception as exc:return {'status':'Unavailable','source':'MAST CAOM','message':str(exc)}
 
 def mast_search(target): return asyncio.run(mast_search_async(target))
+def mast_search(target): return asyncio.run(mast_search_async(target))
 def known_targets(): return CURATED
+
+async def get_all_targets_async(limit=500):
+    key = f'nasa:all:{limit}'
+    cached = get(key)
+    if cached: return cached
+    
+    sql = "select " + ','.join(FIELDS) + f" from ps where default_flag=1 order by disc_year desc"
+    try:
+        # Note: NASA TAP sync only allows top N via specific clauses, but for generic we can just fetch and slice.
+        # Actually, TOP N works in Oracle/ADQL depending on the TAP provider. ADQL supports TOP N.
+        sql = f"select TOP {limit} " + ','.join(FIELDS) + " from ps where default_flag=1 order by disc_year desc"
+        rows = _norm(await _get('https://exoplanetarchive.ipac.caltech.edu/TAP/sync', {'query': sql, 'format': 'json'}))
+        if not rows: return {'status': 'Error', 'message': 'No records found'}
+        result = {'status': 'Success', 'source': 'NASA Exoplanet Archive', 'data': rows}
+        return set(key, result)
+    except Exception as exc:
+        return {'status': 'Unavailable', 'message': str(exc)}
+
+def get_all_targets(limit=500):
+    return asyncio.run(get_all_targets_async(limit))
